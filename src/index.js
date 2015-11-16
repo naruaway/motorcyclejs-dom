@@ -14,51 +14,15 @@ const {
   style, sub, sup, table, tbody, td, textarea, tfoot, th,
   thead, title, tr, u, ul, video,
 } = require(`hyperscript-helpers`)(h)
-import fastMap from 'fast.js/array/map'
 
 import {getDomElement} from './utils'
-import fromEvent from './fromEvent'
+import {
+  makeElementSelector,
+  makeElementSelectorById,
+  makeElementSelectorByClassName,
+  makeElementSelectorByTagName
+} from './elementSelectors'
 import parseTree from './parseTree'
-
-const makeEventsSelector =
-  element$ =>
-    (eventName, useCapture = false) => {
-      if (typeof eventName !== `string`) {
-        throw new Error(`DOM drivers events() expects argument to be a ` +
-          `string representing the event type to listen for.`)
-      }
-      return element$
-        .map(elements => {
-          if (!elements) {
-            return most.empty()
-          }
-          return most.merge(
-            ...fastMap(elements, el => {
-              return fromEvent(eventName, el, useCapture)
-            })
-         )
-        }).switch().multicast()
-    }
-
-const makeElementSelector =
-  rootElem$ =>
-    selector => {
-      if (typeof selector !== `string`) {
-        throw new Error(`DOM drivers select() expects first argument to be a ` +
-          `string as a CSS selector`)
-      }
-      let element$ =
-        selector.trim() === `:root` ?
-          rootElem$ :
-          rootElem$.map(
-            rootElem =>
-              rootElem.querySelectorAll(selector)
-          )
-      return {
-        observable: element$,
-        events: makeEventsSelector(element$),
-      }
-    }
 
 const validateDOMDriverInput =
   view$ => {
@@ -100,6 +64,11 @@ const makeDOMDriver =
 
         return {
           select: makeElementSelector(rootElem$),
+          selectBy: {
+            id: makeElementSelectorById(rootElem$),
+            className: makeElementSelectorByClassName(rootElem$),
+            tagName: makeElementSelectorByTagName(rootElem$),
+          },
         }
       }
 

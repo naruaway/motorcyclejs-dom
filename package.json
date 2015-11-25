@@ -1,6 +1,6 @@
 {
   "name": "@motorcycle/dom",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "description": "Snabbdom driver for motorcycle.js",
   "main": "lib/index.js",
   "directories": {
@@ -54,13 +54,14 @@
     "eslint-plugin-cycle": "^1.0.2",
     "eslint-plugin-no-class": "^0.1.0",
     "mocha": "^2.3.3",
-    "most": "^0.15.0",
+    "most": "^0.16.0",
     "testem": "^0.9.8",
     "wallabify": "0.0.10"
   },
   "dependencies": {
     "fast.js": "^0.1.1",
     "hyperscript-helpers": "^2.0.2",
+    "matches-selector": "^1.0.0",
     "snabbdom": "^0.2.7"
   }
 }
